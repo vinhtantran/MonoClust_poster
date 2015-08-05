@@ -24,14 +24,14 @@ cv.test <- function(data, fold = 10, minnodes = 2, maxnodes = 10, ...) {
         random.list <- sample(index, num.obs, replace=FALSE)
         
         for (k in minnodes:maxnodes) {
-            SSEi=numeric(0)
+            MSEi=numeric(0)
             for (i in 1:fold) {
                 train.set <- data[-which(random.list == i),]
                 test.set <- data[which(random.list == i),]
                 train.tree <- MonoClust(train.set, nclusters = k)
-                SSEi=c(SSEi, sum((test.set-predict(train.tree, test.set)[,-1])^2))
+                MSEi=c(MSEi, mean((test.set-predict(train.tree, test.set)[,-1])^2))
             }
-            SSET=rbind(SSET,c(mean(SSEi), sd(SSEi)))
+            SSET=rbind(SSET,c(mean(MSEi), sd(MSEi)))
             colnames(SSET) <- c("MSE", "Std. Dev.")
         }
     }
